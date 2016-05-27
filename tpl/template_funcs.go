@@ -1096,6 +1096,17 @@ func Markdownify(text string) template.HTML {
 	return template.HTML(m)
 }
 
+// plainify strips any HTML and returns the plain text version.
+func Plainify(in interface{}) (string, error) {
+	s, err := cast.ToStringE(in)
+
+	if err != nil {
+		return "", err
+	}
+
+	return helpers.StripHTML(s), nil
+}
+
 func refPage(page interface{}, ref, methodName string) template.HTML {
 	value := reflect.ValueOf(page)
 
@@ -1402,6 +1413,7 @@ func init() {
 		"absURL":       func(a string) template.HTML { return template.HTML(helpers.AbsURL(a)) },
 		"relURL":       func(a string) template.HTML { return template.HTML(helpers.RelURL(a)) },
 		"markdownify":  Markdownify,
+		"plainify":     Plainify,
 		"first":        First,
 		"last":         Last,
 		"after":        After,
